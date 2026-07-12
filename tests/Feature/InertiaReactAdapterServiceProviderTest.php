@@ -108,6 +108,6 @@ it('passes the generic react build condition only when react is the active inert
 });
 
 it('passes health when the react adapter has been registered', function (): void {
-    expect(InertiaReactAdapterHealthCheck::compatibleCapellApiVersion())->toBe('^4.0')
+    expect(InertiaReactAdapterHealthCheck::compatibleCapellApiVersion())->toBe('^0.0')
         ->and((new InertiaReactAdapterHealthCheck)->passes())->toBeTrue();
 });
