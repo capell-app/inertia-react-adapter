@@ -1,0 +1,11 @@
+{
+    "package": "inertia-react-adapter",
+    "composerName": "capell-app/inertia-react-adapter",
+    "generatedFor": "deployment-screenshot-runner",
+    "requiresInstalledPackage": true,
+    "outputDirectory": "packages/inertia-react-adapter/docs/screenshots",
+    "auditStatus": "visual-exempt",
+    "auditReason": "Runtime adapter package with no owned admin page, public page, or deterministic visual workflow.",
+    "entries": [],
+    "notes": "This adapter package registers React runtime support but owns no admin page, public page, or deterministic visual workflow. Screenshot proof belongs to React-backed theme packages that render actual Inertia pages."
+}
