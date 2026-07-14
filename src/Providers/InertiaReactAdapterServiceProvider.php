@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Capell\InertiaReactAdapter\Providers;
 
-use Capell\Core\Data\VendorAssetData;
 use Capell\Core\Facades\CapellCore;
-use Capell\Core\Support\Assets\VendorAssetConditionRegistry;
 use Capell\Core\Support\Packages\AbstractPackageServiceProvider;
-use Capell\Inertia\Actions\ResolveInertiaAdapterKeyAction;
+use Capell\Frontend\Contracts\FrontendResourceContributor;
+use Capell\Frontend\Data\Assets\FrontendPackageDependencyData;
+use Capell\Frontend\Enums\FrontendPackageDependencyType;
+use Capell\Frontend\Support\Assets\FrontendPackageDependencyRegistry;
+use Capell\Frontend\Support\Assets\FrontendViteInputRegistry;
 use Capell\Inertia\Data\InertiaAdapterData;
 use Capell\Inertia\Support\InertiaAdapterRegistry;
+use Capell\InertiaReactAdapter\Support\InertiaReactFrontendResourceContributor;
 use Override;
 use Spatie\LaravelPackageTools\Package;
 
@@ -21,6 +24,8 @@ final class InertiaReactAdapterServiceProvider extends AbstractPackageServicePro
     public const string BUILD_PATH = 'vendor/capell/inertia-react';
 
     public const string ENTRYPOINT = 'resources/js/app.jsx';
+
+    public const string VITE_INPUT = 'vendor/capell-app/inertia-react-adapter/resources/js/app.jsx';
 
     public static string $name = 'capell-inertia-react-adapter';
 
@@ -38,8 +43,7 @@ final class InertiaReactAdapterServiceProvider extends AbstractPackageServicePro
         }
 
         $this->registerAdapter();
-        $this->registerVendorAssetConditions();
-        $this->registerVendorAssets();
+        $this->registerFrontendResources();
     }
 
     #[Override]
@@ -59,27 +63,35 @@ final class InertiaReactAdapterServiceProvider extends AbstractPackageServicePro
         }
     }
 
-    private function registerVendorAssets(): void
+    private function registerFrontendResources(): void
     {
-        foreach ($this->adapterData()->npmDependencies as $package => $version) {
-            CapellCore::registerVendorAsset(VendorAssetData::npmDependency($package, $version, self::$packageName));
+        $registerDependencies = function (FrontendPackageDependencyRegistry $registry): void {
+            foreach ($this->adapterData()->npmDependencies as $package => $version) {
+                $registry->register(new FrontendPackageDependencyData(
+                    name: $package,
+                    versionConstraint: $version,
+                    type: str_starts_with($package, '@vitejs/') ? FrontendPackageDependencyType::Development : FrontendPackageDependencyType::Runtime,
+                    package: self::$packageName,
+                ));
+            }
+        };
+
+        $this->app->afterResolving(FrontendPackageDependencyRegistry::class, $registerDependencies);
+
+        if ($this->app->resolved(FrontendPackageDependencyRegistry::class)) {
+            $registerDependencies($this->app->make(FrontendPackageDependencyRegistry::class));
         }
 
-        CapellCore::registerVendorAsset(VendorAssetData::buildAsset(
-            path: self::BUILD_PATH,
-            file: self::ENTRYPOINT,
-            packageName: self::$packageName,
-            condition: 'capell-inertia-adapter-react',
-        ));
-    }
+        $registerInput = static function (FrontendViteInputRegistry $registry): void {
+            $registry->register(self::VITE_INPUT, self::$packageName);
+        };
+        $this->app->afterResolving(FrontendViteInputRegistry::class, $registerInput);
 
-    private function registerVendorAssetConditions(): void
-    {
-        resolve(VendorAssetConditionRegistry::class)->register(
-            'capell-inertia-adapter-react',
-            fn (mixed $context): bool => ($context->runtime->usesInertia ?? false)
-                && ResolveInertiaAdapterKeyAction::run() === self::ADAPTER_KEY,
-        );
+        if ($this->app->resolved(FrontendViteInputRegistry::class)) {
+            $registerInput($this->app->make(FrontendViteInputRegistry::class));
+        }
+
+        $this->app->tag(InertiaReactFrontendResourceContributor::class, FrontendResourceContributor::TAG);
     }
 
     private function adapterData(): InertiaAdapterData

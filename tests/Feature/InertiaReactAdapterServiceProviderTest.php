@@ -2,13 +2,18 @@
 
 declare(strict_types=1);
 
-use Capell\Core\Data\VendorAssetData;
-use Capell\Core\Enums\VendorAssetEnum;
-use Capell\Core\Facades\CapellCore;
-use Capell\Core\Support\Assets\VendorAssetConditionRegistry;
+use Capell\Frontend\Data\Assets\FrontendPackageDependencyData;
+use Capell\Frontend\Data\Assets\ViteResourceSourceData;
+use Capell\Frontend\Data\FrontendResourceContextData;
+use Capell\Frontend\Data\FrontendRuntimeManifestData;
+use Capell\Frontend\Enums\FrontendPackageDependencyType;
+use Capell\Frontend\Enums\RenderingStrategyEnum;
+use Capell\Frontend\Support\Assets\FrontendPackageDependencyRegistry;
+use Capell\Frontend\Support\Assets\FrontendViteInputRegistry;
 use Capell\Inertia\Support\InertiaAdapterRegistry;
 use Capell\InertiaReactAdapter\Health\InertiaReactAdapterHealthCheck;
 use Capell\InertiaReactAdapter\Providers\InertiaReactAdapterServiceProvider;
+use Capell\InertiaReactAdapter\Support\InertiaReactFrontendResourceContributor;
 use Capell\InertiaReactAdapter\Tests\InertiaReactAdapterTestCase;
 use Illuminate\Support\Facades\File;
 
@@ -43,30 +48,27 @@ it('registers the react adapter with the inertia bridge', function (): void {
         ]);
 });
 
-it('registers npm dependencies and the react build entrypoint as vendor assets', function (): void {
-    $npmDependencies = CapellCore::getVendorAssetsForType(VendorAssetEnum::NpmDependency)
-        ->filter(static fn (VendorAssetData $asset): bool => $asset->packageName === InertiaReactAdapterServiceProvider::$packageName)
-        ->mapWithKeys(static fn (VendorAssetData $asset): array => [$asset->dependencyName() => $asset->dependencyVersion()])
+it('registers typed dependencies and the conditional React Vite entry', function (): void {
+    $dependencies = collect(resolve(FrontendPackageDependencyRegistry::class)->all())
+        ->mapWithKeys(static fn (FrontendPackageDependencyData $dependency): array => [$dependency->name => [$dependency->versionConstraint, $dependency->type]])
         ->all();
 
-    $buildAssets = CapellCore::getVendorAssetsForType(VendorAssetEnum::BuildAsset)
-        ->filter(static fn (VendorAssetData $asset): bool => $asset->packageName === InertiaReactAdapterServiceProvider::$packageName)
-        ->map(static fn (VendorAssetData $asset): array => [
-            'path' => $asset->path(),
-            'file' => $asset->file(),
-        ])
-        ->values()
-        ->all();
+    expect($dependencies)->toBe([
+        '@inertiajs/react' => ['^3.0.0', FrontendPackageDependencyType::Runtime],
+        '@vitejs/plugin-react' => ['^5.0.0', FrontendPackageDependencyType::Development],
+        'react' => ['^19.0.0', FrontendPackageDependencyType::Runtime],
+        'react-dom' => ['^19.0.0', FrontendPackageDependencyType::Runtime],
+    ])->and(resolve(FrontendViteInputRegistry::class)->all())
+        ->toContain(InertiaReactAdapterServiceProvider::VITE_INPUT);
 
-    expect($npmDependencies)->toBe([
-        '@inertiajs/react' => '^3.0.0',
-        '@vitejs/plugin-react' => '^5.0.0',
-        'react' => '^19.0.0',
-        'react-dom' => '^19.0.0',
-    ])->and($buildAssets)->toContain([
-        'path' => InertiaReactAdapterServiceProvider::BUILD_PATH,
-        'file' => InertiaReactAdapterServiceProvider::ENTRYPOINT,
-    ]);
+    config()->set('capell-inertia.adapter', 'react');
+    $runtime = FrontendRuntimeManifestData::forRenderingStrategy(RenderingStrategyEnum::BladeOnly);
+    $runtime->usesInertia = true;
+    $resources = resolve(InertiaReactFrontendResourceContributor::class)->resources(new FrontendResourceContextData(null, null, null, null, null, $runtime));
+
+    expect($resources)->toHaveCount(1)
+        ->and($resources[0]->resource->source)->toBeInstanceOf(ViteResourceSourceData::class)
+        ->and($resources[0]->resource->source->entry)->toBe(InertiaReactAdapterServiceProvider::VITE_INPUT);
 });
 
 it('keeps declared react components aligned with the generic app component map', function (): void {
@@ -83,28 +85,6 @@ it('keeps declared react components aligned with the generic app component map',
         expect(File::exists($componentPath))->toBeTrue()
             ->and($appSource)->toContain("'" . $componentName . "':");
     }
-});
-
-it('passes the generic react build condition only when react is the active inertia adapter', function (): void {
-    config()->set('capell-inertia.adapter', ' react ');
-
-    $context = (object) [
-        'runtime' => (object) [
-            'usesInertia' => true,
-        ],
-    ];
-
-    $registry = resolve(VendorAssetConditionRegistry::class);
-
-    expect($registry->passes('capell-inertia-adapter-react', $context))->toBeTrue();
-
-    config()->set('capell-inertia.adapter', ['invalid']);
-
-    expect($registry->passes('capell-inertia-adapter-react', $context))->toBeFalse();
-
-    config()->set('capell-inertia.adapter', InertiaReactAdapterServiceProvider::ADAPTER_KEY);
-
-    expect($registry->passes('capell-inertia-adapter-react', $context))->toBeTrue();
 });
 
 it('passes health when the react adapter has been registered', function (): void {
