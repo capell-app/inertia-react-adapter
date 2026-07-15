@@ -65,10 +65,12 @@ it('registers typed dependencies and the conditional React Vite entry', function
     $runtime = FrontendRuntimeManifestData::forRenderingStrategy(RenderingStrategyEnum::BladeOnly);
     $runtime->usesInertia = true;
     $resources = resolve(InertiaReactFrontendResourceContributor::class)->resources(new FrontendResourceContextData(null, null, null, null, null, $runtime));
+    $source = $resources[0]->resource->source;
+
+    throw_unless($source instanceof ViteResourceSourceData, RuntimeException::class, 'React adapter must contribute a Vite resource source.');
 
     expect($resources)->toHaveCount(1)
-        ->and($resources[0]->resource->source)->toBeInstanceOf(ViteResourceSourceData::class)
-        ->and($resources[0]->resource->source->entry)->toBe(InertiaReactAdapterServiceProvider::VITE_INPUT);
+        ->and($source->entry)->toBe(InertiaReactAdapterServiceProvider::VITE_INPUT);
 });
 
 it('keeps declared react components aligned with the generic app component map', function (): void {
