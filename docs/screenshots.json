@@ -4,8 +4,24 @@
     "generatedFor": "deployment-screenshot-runner",
     "requiresInstalledPackage": true,
     "outputDirectory": "packages/inertia-react-adapter/docs/screenshots",
-    "auditStatus": "visual-exempt",
-    "auditReason": "Runtime adapter package with no owned admin page, public page, or deterministic visual workflow.",
-    "entries": [],
+    "auditStatus": "illustrative-fixture",
+    "auditReason": "Deterministic catalogue fixture documents this runtime or bundle package without claiming a package-owned UI.",
+    "entries": [
+        {
+            "id": "inertia-react-adapter-catalogue-preview",
+            "title": "Illustrative inertia react adapter catalogue card.",
+            "package": "inertia-react-adapter",
+            "surface": "frontend",
+            "targetType": "frontend-url",
+            "target": "/screenshot-fixtures/catalogue/inertia-react-adapter/inertia-react-adapter-catalogue-preview",
+            "url": "/screenshot-fixtures/catalogue/inertia-react-adapter/inertia-react-adapter-catalogue-preview",
+            "required": true,
+            "colorSchemes": ["light", "dark"],
+            "screenshotPath": "packages/inertia-react-adapter/docs/screenshots/inertia-react-adapter-catalogue-preview.png",
+            "fixtureKind": "illustrative-catalogue",
+            "notes": "Illustrative deterministic catalogue fixture, not a live package UI capture. Illustrative deterministic catalogue fixture; this runtime or bundle package does not own a standalone UI.",
+            "useCase": "A buyer can distinguish this package in the marketplace catalogue without mistaking placeholder artwork for product UI."
+        }
+    ],
     "notes": "This adapter package registers React runtime support but owns no admin page, public page, or deterministic visual workflow. Screenshot proof belongs to React-backed theme packages that render actual Inertia pages."
 }
