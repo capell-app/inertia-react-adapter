@@ -1,0 +1,40 @@
+{
+    "version": 3,
+    "package": "inertia-react-adapter",
+    "scenarios": {
+        "default": {
+            "source": {
+                "ref": "origin/main",
+                "commit": "646068b2d21e233ea517c342d62bc0eca1762192",
+                "providers": {
+                    "Providers/InertiaReactAdapterServiceProvider.php": "9faa864fe1af23e8f36cc42c122beadbd1bff2d58ee71dc6d776b41c8b1cd82c"
+                }
+            },
+            "disabledContributions": [],
+            "surfaces": {
+                "routes": [],
+                "livewire": [],
+                "filament": [],
+                "listeners": [],
+                "gates": [],
+                "policies": [],
+                "commands": [],
+                "view-namespaces": [],
+                "config-keys": [],
+                "migrations": []
+            },
+            "uninstalledSurfaces": {
+                "routes": [],
+                "livewire": [],
+                "filament": [],
+                "listeners": [],
+                "gates": [],
+                "policies": [],
+                "commands": [],
+                "view-namespaces": [],
+                "config-keys": [],
+                "migrations": []
+            }
+        }
+    }
+}
