@@ -109,7 +109,23 @@
     },
     "marketplace": {
         "summary": "Register the React client runtime for Capell Inertia with React/Vite dependencies, a generic application entrypoint, and safe adapter activation.",
-        "description": "Registers React NPM dependencies, the Capell Inertia React application entrypoint, and the react adapter metadata consumed by the shared bridge.",
+        "description": "Registers React NPM dependencies, the Capell Inertia React application entrypoint, and the react adapter metadata consumed by the shared bridge. Choose it only when your frontend is built with React; it requires Capell Inertia and adds no screens to the admin.",
+        "problem": "Our React theme needs custom bridge wiring before it can render Capell pages.",
+        "outcome": "A React Inertia theme can render public pages using the registered client runtime.",
+        "faq": [
+            {
+                "question": "Does this add a React editing screen?",
+                "answer": "The adapter declares no admin page or editor extension."
+            },
+            {
+                "question": "How does the React theme receive its runtime?",
+                "answer": "The adapter registers a React client runtime and entrypoint with the shared Inertia bridge."
+            },
+            {
+                "question": "Where is content stored with this adapter?",
+                "answer": "The adapter has no schema impact; persistence remains with Core or required packages."
+            }
+        ],
         "screenshots": [
             {
                 "path": "docs/assets/marketplace/extension-card.jpg",
