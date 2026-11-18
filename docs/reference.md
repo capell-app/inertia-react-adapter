@@ -6,7 +6,7 @@ Developer reference for `capell-app/inertia-react-adapter`. Start with the [READ
 
 ## Package Details
 
-Capell Inertia React Adapter is an **Available**, **No schema impact** Capell plugin in the **Capell Frontend** product group. It ships as `capell-app/inertia-react-adapter` and extends these surfaces: frontend.
+Capell Inertia React Adapter is an **Available** Capell extension in the **Capell Frontend** product group. It ships as `capell-app/inertia-react-adapter` and extends these surfaces: frontend.
 
 - Status: Available
 - Tier: core

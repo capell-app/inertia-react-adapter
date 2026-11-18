@@ -20,7 +20,7 @@
             "screenshotPath": "packages/inertia-react-adapter/docs/screenshots/inertia-react-adapter-catalogue-preview.png",
             "fixtureKind": "illustrative-catalogue",
             "notes": "Illustrative deterministic catalogue fixture, not a live package UI capture. Illustrative deterministic catalogue fixture; this runtime or bundle package does not own a standalone UI.",
-            "useCase": "A buyer can distinguish this package in the marketplace catalogue without mistaking placeholder artwork for product UI."
+            "useCase": "The Inertia React adapter extension card in the Marketplace."
         }
     ],
     "notes": "This adapter package registers React runtime support but owns no admin page, public page, or deterministic visual workflow. Screenshot proof belongs to React-backed theme packages that render actual Inertia pages."

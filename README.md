@@ -2,27 +2,25 @@
 
 <!-- prettier-ignore-start -->
 
-## What It Does
+A React team switches Capell Inertia over to React with one setting. Vue is the default, and setting CAPELL_INERTIA_ADAPTER to react swaps in this adapter. Only one adapter runs on a site, so you pick one.
 
-The React adapter registers a React client runtime with the shared Capell Inertia bridge.
+Install it and your build gets React 19, Inertia's React library and Vite's React integration. Its script runs only when React is chosen, and only on pages shown through Inertia. The server cleans page and widget HTML before React sees it.
+
+Content, image and title widgets each have a React component. Other widget types use the content component. That shows only a title and content. The components add class names such as capell-inertia-page but no styles, so you set the look. Each page shows its title, its content and each layout container with its widgets.
 
 - **Price and availability:** Check current availability and price on the [Capell Marketplace listing](https://capell.app/extensions/inertia-react-adapter).
 - **Licence:** Check the licence terms on the [Capell Marketplace listing](https://capell.app/extensions/inertia-react-adapter).
 - **Requires:** `PHP ^8.4`, `capell-app/core ^1.0.66`, `capell-app/frontend ^1.0.2`, `capell-app/inertia ^1.0`, `spatie/laravel-package-tools ^1.14.1`.
 - **Install:** `composer require capell-app/inertia-react-adapter`.
 
-It adds no admin screen. React-based Inertia themes can use the registered entrypoint and client runtime when they render public pages.
-
-## Who It Is For
-
-**For developers:** The provider supplies the adapter definition and assets expected by Capell Inertia, so themes do not need their own bridge wiring.
-
-**For teams:** Teams can choose a React Inertia theme without changing how editors manage Capell content.
-
 ## Quick Start
 
 1. Install the package: `composer require capell-app/inertia-react-adapter`.
 2. Verify the package provider and manifest contributions are registered in the host app.
+
+## For Developers
+
+The provider supplies the adapter definition and assets expected by Capell Inertia, so themes do not need their own bridge wiring.
 
 ## Configure
 

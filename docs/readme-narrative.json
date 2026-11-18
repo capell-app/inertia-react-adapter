@@ -1,20 +1,4 @@
 {
-    "whatThisPluginAdds": {
-        "text": "The React adapter registers a React client runtime with the shared Capell Inertia bridge.",
-        "evidence": [
-            "src/Providers/InertiaReactAdapterServiceProvider.php",
-            "tests/Feature/InertiaReactAdapterServiceProviderTest.php",
-            "capell.json"
-        ]
-    },
-    "surfaceOutcome": {
-        "text": "It adds no admin screen. React-based Inertia themes can use the registered entrypoint and client runtime when they render public pages.",
-        "evidence": [
-            "docs/overview.admin.md",
-            "src/Providers/InertiaReactAdapterServiceProvider.php",
-            "tests/Feature/InertiaReactAdapterServiceProviderTest.php"
-        ]
-    },
     "whyItMatters": {
         "developers": {
             "text": "The provider supplies the adapter definition and assets expected by Capell Inertia, so themes do not need their own bridge wiring.",
@@ -22,10 +6,6 @@
                 "src/Providers/InertiaReactAdapterServiceProvider.php",
                 "tests/Feature/InertiaReactAdapterServiceProviderTest.php"
             ]
-        },
-        "teams": {
-            "text": "Teams can choose a React Inertia theme without changing how editors manage Capell content.",
-            "evidence": ["docs/overview.admin.md", "capell.json"]
         }
     }
 }

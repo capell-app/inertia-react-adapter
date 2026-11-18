@@ -1,0 +1,78 @@
+[
+    {
+        "claim": "A React team switches Capell Inertia over to React with one setting.",
+        "evidence": [
+            "src/Providers/InertiaReactAdapterServiceProvider.php",
+            "src/Support/InertiaReactFrontendResourceContributor.php",
+            "resources/js/app.jsx"
+        ]
+    },
+    {
+        "claim": "Vue is the default, and setting CAPELL_INERTIA_ADAPTER to react swaps in this adapter.",
+        "evidence": [
+            "src/Providers/InertiaReactAdapterServiceProvider.php",
+            "src/Support/InertiaReactFrontendResourceContributor.php"
+        ]
+    },
+    {
+        "claim": "Only one adapter runs on a site, so you pick one.",
+        "evidence": [
+            "src/Providers/InertiaReactAdapterServiceProvider.php",
+            "src/Support/InertiaReactFrontendResourceContributor.php"
+        ]
+    },
+    {
+        "claim": "Install it and your build gets React 19, Inertia's React library and Vite's React integration.",
+        "evidence": [
+            "src/Providers/InertiaReactAdapterServiceProvider.php",
+            "resources/js/app.jsx"
+        ]
+    },
+    {
+        "claim": "Its script runs only when React is chosen, and only on pages shown through Inertia.",
+        "evidence": [
+            "src/Support/InertiaReactFrontendResourceContributor.php",
+            "src/Providers/InertiaReactAdapterServiceProvider.php"
+        ]
+    },
+    {
+        "claim": "The server cleans page and widget HTML before React sees it.",
+        "evidence": [
+            "resources/js/Pages/Capell/Page.jsx",
+            "resources/js/Components/Capell/Widgets/Content.jsx"
+        ]
+    },
+    {
+        "claim": "Content, image and title widgets each have a React component.",
+        "evidence": [
+            "resources/js/Pages/Capell/Page.jsx",
+            "resources/js/Components/Capell/Widgets/Content.jsx",
+            "resources/js/Components/Capell/Widgets/Image.jsx",
+            "resources/js/Components/Capell/Widgets/Title.jsx"
+        ]
+    },
+    {
+        "claim": "Other widget types use the content component.",
+        "evidence": [
+            "resources/js/Pages/Capell/Page.jsx",
+            "resources/js/Components/Capell/Widgets/Content.jsx"
+        ]
+    },
+    {
+        "claim": "That shows only a title and content.",
+        "evidence": ["resources/js/Components/Capell/Widgets/Content.jsx"]
+    },
+    {
+        "claim": "The components add class names such as capell-inertia-page but no styles, so you set the look.",
+        "evidence": [
+            "resources/js/Pages/Capell/Page.jsx",
+            "resources/js/Components/Capell/Widgets/Content.jsx",
+            "resources/js/Components/Capell/Widgets/Image.jsx",
+            "resources/js/Components/Capell/Widgets/Title.jsx"
+        ]
+    },
+    {
+        "claim": "Each page shows its title, its content and each layout container with its widgets.",
+        "evidence": ["resources/js/Pages/Capell/Page.jsx"]
+    }
+]

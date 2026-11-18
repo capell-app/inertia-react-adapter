@@ -6,7 +6,7 @@
     "kind": "plugin",
     "capellApiVersion": "^1.0",
     "version": "1.0.0",
-    "description": "React client adapter for Capell Inertia pages, package routes, and adapter-driven themes.",
+    "description": "React 19 client for Capell pages with page and widget components, for sites whose front-end team writes React.",
     "product": {
         "group": "Capell Frontend",
         "tier": "core",
@@ -46,7 +46,7 @@
     },
     "settings": [],
     "permissions": [],
-    "capabilities": ["inertia-adapter-react"],
+    "capabilities": ["frontend-rendering", "frontend-assets"],
     "security": {
         "riskTier": "low",
         "publicSurface": {
@@ -108,29 +108,33 @@
         "privateDocsRequested": false
     },
     "marketplace": {
-        "summary": "Register the React client runtime for Capell Inertia with React/Vite dependencies, a generic application entrypoint, and safe adapter activation.",
-        "description": "Registers React NPM dependencies, the Capell Inertia React application entrypoint, and the react adapter metadata consumed by the shared bridge. Choose it only when your frontend is built with React; it requires Capell Inertia and adds no screens to the admin.",
-        "problem": "Our React theme needs custom bridge wiring before it can render Capell pages.",
-        "outcome": "A React Inertia theme can render public pages using the registered client runtime.",
+        "summary": "Switch Capell Inertia to React with one setting, and pages arrive as React 19 components with the build packages declared for you.",
+        "description": "React 19 components for Capell pages, built for teams who write their public site in React. Set the adapter to react and the page, content, image and title components replace the Vue ones. The npm packages your build needs are declared for you.",
+        "problem": "Our front-end team works in React, and nobody wants to build the components that show Capell pages.",
+        "outcome": "Your React team gets page and widget components once the adapter setting says react, and editors keep working in the admin.",
         "faq": [
             {
-                "question": "Does this add a React editing screen?",
-                "answer": "The adapter declares no admin page or editor extension."
+                "question": "How do I switch my site over to React?",
+                "answer": "Vue is the default, and one setting changes it to react, which swaps in this adapter. Only one adapter runs on a site, so you pick one."
             },
             {
-                "question": "How does the React theme receive its runtime?",
-                "answer": "The adapter registers a React client runtime and entrypoint with the shared Inertia bridge."
+                "question": "What does it add to my front-end build?",
+                "answer": "React 19, Inertia's React library and Vite's React integration. Its script runs only when React is chosen, and only on pages shown through Inertia."
             },
             {
-                "question": "Where is content stored with this adapter?",
-                "answer": "The adapter has no schema impact; persistence remains with Core or required packages."
+                "question": "Does it come with a look of its own?",
+                "answer": "No. The components add class names such as capell-inertia-page but no styles, so you set the look."
+            },
+            {
+                "question": "What shows for a widget that has no React component of its own?",
+                "answer": "Content, image and title widgets each have a React component. Any other widget type uses the content component, which shows only a title and content."
             }
         ],
         "screenshots": [
             {
                 "path": "docs/assets/marketplace/extension-card.jpg",
-                "alt": "Capell Inertia React adapter beta marketplace artwork",
-                "caption": "Beta artwork for the React runtime adapter; rendered proof belongs to a consuming React page or theme."
+                "alt": "Marketplace card titled Capell Inertia React Adapter with two panels in light and dark beside a three-step diagram",
+                "caption": "The card that represents the React adapter on its Marketplace listing."
             }
         ],
         "categories": ["frontend", "developer-tools"]
