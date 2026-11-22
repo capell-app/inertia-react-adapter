@@ -5,9 +5,9 @@
         "default": {
             "source": {
                 "ref": "HEAD",
-                "commit": "adac26b4ce1e9e1de545f68a1ff272ff73111696",
+                "commit": "ebcd458e0a9ad46f7c93be498066a4c04dc6e896",
                 "providers": {
-                    "Providers/InertiaReactAdapterServiceProvider.php": "ed72adf678f7e0f7c5896b833225815fb310bbd3541c0ffeb8d2a0480c921878"
+                    "Providers/InertiaReactAdapterServiceProvider.php": "72dda44659cd156cf3f6c10b75fcdceb1d7ec17e3dbad45407c1f9f18a528743"
                 },
                 "configure": null
             },
@@ -68,6 +68,14 @@
                     "Capell\\Frontend\\Support\\Assets\\FrontendViteInputRegistry": {
                         "items": {
                             "capell-app/inertia-react-adapter|vendor/capell-app/inertia-react-adapter/resources/js/app.jsx": "vendor/capell-app/inertia-react-adapter/resources/js/app.jsx"
+                        }
+                    },
+                    "Capell\\Frontend\\Support\\Assets\\FrontendVitePluginRegistry": {
+                        "items": {
+                            "capell-app/inertia-react-adapter|@vitejs/plugin-react": {
+                                "module": "@vitejs/plugin-react",
+                                "options": []
+                            }
                         }
                     },
                     "Capell\\Inertia\\Support\\InertiaAdapterRegistry": {

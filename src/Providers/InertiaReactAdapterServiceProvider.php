@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Capell\InertiaReactAdapter\Providers;
 
+use Capell\Core\Contracts\Rendering\FrontendResourceContributor;
 use Capell\Core\Support\Packages\AbstractPackageServiceProvider;
-use Capell\Frontend\Contracts\FrontendResourceContributor;
 use Capell\Frontend\Data\Assets\FrontendPackageDependencyData;
 use Capell\Frontend\Enums\FrontendPackageDependencyType;
 use Capell\Frontend\Support\Assets\FrontendPackageDependencyRegistry;
 use Capell\Frontend\Support\Assets\FrontendViteInputRegistry;
+use Capell\Frontend\Support\Assets\FrontendVitePluginRegistry;
 use Capell\Inertia\Data\InertiaAdapterData;
 use Capell\Inertia\Support\InertiaAdapterRegistry;
 use Capell\InertiaReactAdapter\Support\InertiaReactFrontendResourceContributor;
@@ -25,6 +26,8 @@ final class InertiaReactAdapterServiceProvider extends AbstractPackageServicePro
     public const string ENTRYPOINT = 'resources/js/app.jsx';
 
     public const string VITE_INPUT = 'vendor/capell-app/inertia-react-adapter/resources/js/app.jsx';
+
+    public const string VITE_PLUGIN = '@vitejs/plugin-react';
 
     public static string $name = 'capell-inertia-react-adapter';
 
@@ -75,6 +78,13 @@ final class InertiaReactAdapterServiceProvider extends AbstractPackageServicePro
             $registry->register(self::VITE_INPUT, self::$packageName);
         };
         $this->callAfterResolving(FrontendViteInputRegistry::class, $registerInput);
+
+        // Vite 8 compiles the `.jsx` entry with the automatic runtime on its own, but only the React plugin
+        // adds Fast Refresh, so the adapter registers the plugin whose package it already declares.
+        $registerPlugin = static function (FrontendVitePluginRegistry $registry): void {
+            $registry->register(self::VITE_PLUGIN, self::$packageName);
+        };
+        $this->callAfterResolving(FrontendVitePluginRegistry::class, $registerPlugin);
 
         $this->app->tag(InertiaReactFrontendResourceContributor::class, FrontendResourceContributor::TAG);
     }

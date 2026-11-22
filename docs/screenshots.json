@@ -1,7 +1,8 @@
 {
     "package": "inertia-react-adapter",
     "composerName": "capell-app/inertia-react-adapter",
-    "generatedFor": "deployment-screenshot-runner",
+    "generatedFor": "shared-capell-screenshot-runner",
+    "provenancePolicy": "runner-only-v1",
     "requiresInstalledPackage": true,
     "outputDirectory": "packages/inertia-react-adapter/docs/screenshots",
     "auditStatus": "fixture-needed",

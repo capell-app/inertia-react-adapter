@@ -8,14 +8,14 @@ Install it and your build gets React 19, Inertia's React library and Vite's Reac
 
 Content, image and title widgets each have a React component. Other widget types use the content component. That shows only a title and content. The components add class names such as capell-inertia-page but no styles, so you set the look. Each page shows its title, its content and each layout container with its widgets.
 
-- **Price and availability:** Check current availability and price on the [Capell Marketplace listing](https://capell.app/extensions/inertia-react-adapter).
-- **Licence:** Check the licence terms on the [Capell Marketplace listing](https://capell.app/extensions/inertia-react-adapter).
-- **Requires:** `PHP ^8.4`, `capell-app/core ^1.0.66`, `capell-app/frontend ^1.0.2`, `capell-app/inertia ^1.0`, `spatie/laravel-package-tools ^1.14.1`.
-- **Install:** `composer require capell-app/inertia-react-adapter`.
+- **Price and availability:** Check current availability and price on the [Capell Marketplace listing](https://capell.app/marketplace/extensions/inertia-react-adapter).
+- **Licence:** Check the licence terms on the [Capell Marketplace listing](https://capell.app/marketplace/extensions/inertia-react-adapter).
+- **Requires:** `PHP ^8.4`, `capell-app/core ^1.0.79`, `capell-app/frontend ^1.0.79`, `capell-app/inertia ^1.0`, `spatie/laravel-package-tools ^1.14.1`.
+- **Install:** `composer require capell-app/inertia-react-adapter:@beta`.
 
 ## Quick Start
 
-1. Install the package: `composer require capell-app/inertia-react-adapter`.
+1. Install the package: `composer require capell-app/inertia-react-adapter:@beta`.
 2. Verify the package provider and manifest contributions are registered in the host app.
 
 ## For Developers
@@ -28,7 +28,7 @@ This extension works without configuration. There is nothing to set after instal
 
 ## Limits And Pitfalls
 
-- Install the required Capell packages at the versions in `composer.json`: `capell-app/core ^1.0.66`, `capell-app/frontend ^1.0.2`, `capell-app/inertia ^1.0`.
+- Install the required Capell packages at the versions in `composer.json`: `capell-app/core ^1.0.79`, `capell-app/frontend ^1.0.79`, `capell-app/inertia ^1.0`.
 - Keep public Blade and cached HTML free of authoring markers, model IDs, permissions, signed editor URLs, and lazy database queries.
 - Custom write integrations must preserve invalidation for `inertia-react` cache tags.
 

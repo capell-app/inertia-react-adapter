@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
+use Capell\Core\Data\Diagnostics\DoctorCheckResultData;
+use Capell\Core\Data\Rendering\FrontendResourceContextData;
+use Capell\Core\Data\Rendering\FrontendRuntimeManifestData;
+use Capell\Core\Enums\Rendering\RenderingStrategyEnum;
 use Capell\Frontend\Data\Assets\FrontendPackageDependencyData;
 use Capell\Frontend\Data\Assets\ViteResourceSourceData;
-use Capell\Frontend\Data\FrontendResourceContextData;
-use Capell\Frontend\Data\FrontendRuntimeManifestData;
 use Capell\Frontend\Enums\FrontendPackageDependencyType;
-use Capell\Frontend\Enums\RenderingStrategyEnum;
 use Capell\Frontend\Support\Assets\FrontendPackageDependencyRegistry;
 use Capell\Frontend\Support\Assets\FrontendViteInputRegistry;
+use Capell\Frontend\Support\Assets\FrontendVitePluginRegistry;
 use Capell\Inertia\Support\InertiaAdapterRegistry;
 use Capell\InertiaReactAdapter\Health\InertiaReactAdapterHealthCheck;
 use Capell\InertiaReactAdapter\Providers\InertiaReactAdapterServiceProvider;
@@ -69,7 +71,12 @@ it('registers typed dependencies and the conditional React Vite entry', function
         'react' => ['^19.0.0', FrontendPackageDependencyType::Runtime],
         'react-dom' => ['^19.0.0', FrontendPackageDependencyType::Runtime],
     ])->and(resolve(FrontendViteInputRegistry::class)->all())
-        ->toContain(InertiaReactAdapterServiceProvider::VITE_INPUT);
+        ->toContain(InertiaReactAdapterServiceProvider::VITE_INPUT)
+        // The adapter declares @vitejs/plugin-react, so the application build must actually load it.
+        ->and(resolve(FrontendVitePluginRegistry::class)->all())->toContain([
+            'module' => '@vitejs/plugin-react',
+            'options' => [],
+        ]);
 
     config()->set('capell-inertia.adapter', 'react');
     $runtime = FrontendRuntimeManifestData::forRenderingStrategy(RenderingStrategyEnum::BladeOnly);
@@ -98,4 +105,26 @@ it('resolves every declared react page and mounts the public app with its props'
 it('passes health when the react adapter has been registered', function (): void {
     expect(InertiaReactAdapterHealthCheck::compatibleCapellApiVersion())->toBe('^1.0')
         ->and((new InertiaReactAdapterHealthCheck)->passes())->toBeTrue();
+});
+
+it('reports one passing diagnostic per react adapter concern when it is registered and its entrypoint ships', function (): void {
+    $results = InertiaReactAdapterHealthCheck::runDiagnostics();
+
+    expect($results->pluck('id')->all())->toBe(['inertia-react-adapter.registered', 'inertia-react-adapter.entrypoint'])
+        ->and($results->every(static fn ($result): bool => $result->passed))->toBeTrue();
+});
+
+it('fails the react adapter diagnostics when the bridge has no react adapter registered', function (): void {
+    app()->instance(InertiaAdapterRegistry::class, new InertiaAdapterRegistry);
+
+    $results = InertiaReactAdapterHealthCheck::runDiagnostics();
+    $registered = $results->firstWhere('id', 'inertia-react-adapter.registered');
+    $entrypoint = $results->firstWhere('id', 'inertia-react-adapter.entrypoint');
+
+    throw_unless($registered instanceof DoctorCheckResultData && $entrypoint instanceof DoctorCheckResultData, RuntimeException::class, 'Expected both diagnostics.');
+
+    expect((new InertiaReactAdapterHealthCheck)->passes())->toBeFalse()
+        ->and($registered->passed)->toBeFalse()
+        ->and($registered->remediation)->not->toBeNull()
+        ->and($entrypoint->passed)->toBeTrue();
 });
