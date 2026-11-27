@@ -6,6 +6,7 @@
     "kind": "plugin",
     "capellApiVersion": "^1.0",
     "version": "1.0.0",
+    "launchStatus": "preview",
     "description": "React 19 client for Capell pages with page and widget components, for sites whose front-end team writes React.",
     "product": {
         "group": "Capell Frontend",
